@@ -17,7 +17,11 @@ class Bot:
         from pyrandseqbot.api import handlers
         self.dp.add_handler(CommandHandler('start', handlers.start))
         self.dp.add_handler(CommandHandler('help', handlers.start))
-        self.dp.add_handler(MessageHandler(Filters.text & ~Filters.command, handlers.start))
+        self.dp.add_handler(CommandHandler('get_random_sequence', handlers.get_random_sequence))
+        self.dp.add_handler(CommandHandler('clear_sequence', handlers.clear_sequence))
+        self.dp.add_handler(CommandHandler('add_sequence', handlers.add_sequence))
+
+        self.dp.add_handler(MessageHandler(Filters.regex(r'^@pyRandSeqBot(.+)?'), handlers.mention))
         _logger.info('Telegram bot successfully started')
 
         self.updater.start_polling()

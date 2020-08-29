@@ -19,7 +19,9 @@ class Database:
             connect_args={'check_same_thread': False}
         )
         self.create_session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-        self.base_model.metadata.create_all(bind=engine)
+
+        from pyrandseqbot.orm.models import ChatModel
+        self.base_model.metadata.create_all(bind=engine, tables=[ChatModel.__table__])
         self.connected = True
         _logger.info('Database connection successfully established')
 
