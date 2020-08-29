@@ -1,0 +1,5 @@
+python-telegram-bot
+sqlalchemy
+pydantic
+starlette
+ruamel.yaml

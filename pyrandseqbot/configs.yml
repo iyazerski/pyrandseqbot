@@ -1,0 +1,29 @@
+path:
+  logs: .logs
+  db: db/pyrandseqbot.db
+logging:
+  version: 1
+  disable_existing_loggers: false
+  formatters:
+    simple:
+      format: '%(asctime)s - %(name)s - [%(levelname)s] - %(message)s'
+    complex:
+      format: '%(asctime)s - %(name)s - %(lineno)d - [%(levelname)s] - %(message)s'
+  handlers:
+    console:
+      class: logging.StreamHandler
+      level: DEBUG
+      formatter: complex
+    file:
+      class: logging.handlers.TimedRotatingFileHandler
+      encoding: utf-8
+      when: midnight
+      backupCount: 90
+      level: DEBUG
+      formatter: complex
+      filename: main.log
+  root:
+    level: INFO
+    handlers:
+      - console
+      - file
