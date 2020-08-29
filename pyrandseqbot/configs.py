@@ -30,12 +30,14 @@ class Configs:
         self.orm = orm
         self.loaded = False
 
-    def load(self, config_path: str = f'{Path(__file__).parent}/configs.yml') -> 'Configs':
+    def load(self, config_path: str = None) -> 'Configs':
         env_config = Config('.env')
         yaml = YAML()
-        with open(config_path, 'r', encoding='utf-8') as fp:
+
+        config_path = Path(config_path or f'{Path(__file__).parent}/configs.yml')
+        with config_path.open('r', encoding='utf-8') as fp:
             yml_config = yaml.load(fp)
-        base_dir = Path(config_path).parent.parent
+        base_dir = config_path.parent.parent
 
         self.path = PathConfig(
             **{key: Path(f'{base_dir}/{value}') for key, value in yml_config['path'].items()},
