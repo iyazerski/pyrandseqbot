@@ -1,0 +1,13 @@
+context:
+  env_file: .env
+tasks:
+  up:
+    - title: all
+      pipeline:
+        - "docker network create --driver=bridge pyrandseqbot-{ENV}"
+        - "docker-compose -f deploy/docker-compose-{ENV}.yml up --build -d"
+  down:
+    - title: all
+      pipeline:
+        - "docker-compose -f deploy/docker-compose-{ENV}.yml down"
+        - "docker network rm pyrandseqbot-{ENV}"
