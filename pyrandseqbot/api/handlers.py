@@ -45,10 +45,7 @@ def mention(update, context):
         chat = crud.read(chat_id=update.message.chat_id) or crud.create(chat_id=update.message.chat_id)
         chat.sequence = sequence
         crud.update(chat)
-        sequence = '\n'.join(f'{i + 1}. {el}' for i, el in enumerate(chat.sequence))
-        update.message.reply_text(f'Сохранил следующие {len(chat.sequence)} элемента(-ов):\n\n{sequence}')
-    else:
-        return get_random_sequence(update, context)
+    return get_random_sequence(update, context)
 
 
 @before_handler(ChatAction.TYPING)
@@ -69,8 +66,7 @@ def get_random_sequence(update, context):
         )
     else:
         random.shuffle(chat.sequence)
-        sequence = '\n'.join(f'{i + 1}. {el}' for i, el in enumerate(chat.sequence))
-        update.message.reply_text(f'Перемешал следующие {len(chat.sequence)} элемента(-ов):\n\n{sequence}')
+        update.message.reply_text('\n'.join(f'{i + 1}. {el}' for i, el in enumerate(chat.sequence)))
 
 
 @before_handler(ChatAction.TYPING)
