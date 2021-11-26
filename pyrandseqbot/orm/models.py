@@ -1,11 +1,9 @@
-from sqlalchemy import Column, String, Integer, JSON
+from typing import Optional
 
-from pyrandseqbot.orm.connection import db
+from sqlmodel import Field, SQLModel
 
 
-class ChatModel(db.base_model):
-    __tablename__ = 'chats'
-
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True, nullable=False)
-    chat_id = Column(String, unique=True, index=True, nullable=False)
-    sequence = Column(JSON, nullable=True, default=None)
+class Chat(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    chat_id: str = Field(index=True, nullable=False)
+    sequence: str = Field(index=False, nullable=True, default=None)

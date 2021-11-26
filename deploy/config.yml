@@ -1,13 +1,18 @@
 context:
   env_file: .env
+  compose: deploy/docker-compose-template.j2
 tasks:
+  build:
+    - title: all
+      pipeline:
+        - "docker-compose -f deploy/docker-compose-{ENV}.yml build"
   up:
     - title: all
       pipeline:
-        - "docker network create --driver=bridge pyrandseqbot-{ENV}"
-        - "docker-compose -f deploy/docker-compose-{ENV}.yml up --build -d"
+        - "docker network create --driver=bridge {PROJECT_SLUG}-{ENV}"
+        - "docker-compose -f deploy/docker-compose-{ENV}.yml up -d --no-build"
   down:
     - title: all
       pipeline:
         - "docker-compose -f deploy/docker-compose-{ENV}.yml down"
-        - "docker network rm pyrandseqbot-{ENV}"
+        - "docker network rm {PROJECT_SLUG}-{ENV}"

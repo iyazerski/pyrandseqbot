@@ -1,0 +1,10 @@
+# data
+pydantic
+ruamel.yaml
+
+# orm
+sqlalchemy
+sqlmodel
+
+# bot
+python-telegram-bot

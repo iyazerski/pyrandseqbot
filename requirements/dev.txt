@@ -1,0 +1,6 @@
+# install base requirements
+-r common.txt
+
+ipython
+flake8
+pydeployhelp
