@@ -70,6 +70,7 @@ def get_random_sequence(update, chat: db.models.Chat = None):
             callback()
     else:
         callback()
+    _logger.info(f'Generated random sequence for chat[{chat.chat_id}]')
 
 
 def clear_sequence(update):
@@ -85,3 +86,4 @@ def clear_sequence(update):
             chat.sequence = None
             db.update(instance=chat, session=session)
             update.message.reply_text('Удалил все введенные Вами данные')
+    _logger.info(f'Cleared sequence for chat[{chat.chat_id}]')

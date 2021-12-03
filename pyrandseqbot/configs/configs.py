@@ -62,15 +62,25 @@ class PathConfigs(BaseModel):
 
 
 class BotConfigs(BaseModel):
+    env: str
+    host: str
+    port: int
     token: str
     name: str
 
     @classmethod
     def from_context(cls, context: Context):
         return cls(
-            token=context.env.get('BOT_TOKEN', cast=str),
-            name=context.env.get('BOT_NAME', cast=str)
+            env=context.env.get('ENV', default='dev'),
+            host=context.env.get('HOST', default='localhost'),
+            port=context.env.get('PORT', default=8443, cast=int),
+            token=context.env.get('BOT_TOKEN'),
+            name=context.env.get('BOT_NAME')
         )
+
+    @property
+    def webhook_url(self) -> str:
+        return f'https://{self.host}/{self.token}'
 
 
 class DatabaseConfigs(BaseModel):
