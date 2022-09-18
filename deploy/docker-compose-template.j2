@@ -2,8 +2,7 @@
 {% set PROJECT_USER = 'admin' %}
 {% set PROJECT_ROOT = '/home/' ~ PROJECT_USER ~ '/' ~ PROJECT_SLUG %}
 {% set VIRTUAL_ENV = PROJECT_ROOT ~ '/venv' %}
-{% set DEBUG = DEBUG | default(false, true) %}
-{% set ENABLE_TRAEFIK = ENV == 'prod' %}
+{% set ENABLE_TRAEFIK = ENABLE_TRAEFIK or ENV == 'prod' %}
 {% set BOT_SERVICE_NAME = PROJECT_SLUG ~ '-' ~ ENV %}
 {% set PORT = PORT or 8443 %}
 
@@ -52,7 +51,6 @@ services:
     {% endif %}
     command: python -m run
     environment:
-      DEBUG: "{{ DEBUG }}"
       {% if ENABLE_TRAEFIK %}
       ENV: {{ ENV }}
       HOST: {{ HOST }}

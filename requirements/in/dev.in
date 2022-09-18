@@ -1,0 +1,12 @@
+# linting
+flake8
+pylint
+
+# debug
+ipython
+
+# deploy
+pydeployhelp
+
+# requirements
+pip-tools
