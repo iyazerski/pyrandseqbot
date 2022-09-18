@@ -1,5 +1,5 @@
 # base image
-FROM python:3.9-buster AS builder-image
+FROM python:3.10-buster AS builder-image
 
 # add service user
 ARG PROJECT_USER
@@ -16,12 +16,11 @@ ARG VIRTUAL_ENV
 RUN python -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN python -m pip install --upgrade --no-cache-dir pip setuptools wheel
-COPY requirements/common.txt common.txt
 COPY requirements/prod.txt requirements.txt
 RUN pip install -r requirements.txt --no-cache-dir && rm -rf /var/lib/apt/lists/*
 
 # main image
-FROM python:3.9-slim AS main-image
+FROM python:3.10-slim AS main-image
 
 # add service user
 ARG PROJECT_USER

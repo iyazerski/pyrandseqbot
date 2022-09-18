@@ -5,19 +5,31 @@ tasks:
   build:
     - title: all
       pipeline:
-        - "docker-compose -f deploy/docker-compose-{ENV}.yml build"
+        - "COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 DOCKER_DEFAULT_PLATFORM=linux/amd64 docker compose -f deploy/docker-compose-{ENV}.yml build"
   up:
     - title: all
       pipeline:
         - "docker network create --driver=bridge {PROJECT_SLUG}-{ENV}"
-        - "docker-compose -f deploy/docker-compose-{ENV}.yml up -d --no-build"
+        - "docker compose -f deploy/docker-compose-{ENV}.yml up -d"
   down:
     - title: all
       pipeline:
-        - "docker-compose -f deploy/docker-compose-{ENV}.yml down"
+        - "docker compose -f deploy/docker-compose-{ENV}.yml down"
         - "docker network rm {PROJECT_SLUG}-{ENV}"
-  traefik:
+  up_external:
     - title: all
       pipeline:
         - "docker network create traefik-public"
-        - "docker-compose -f deploy/docker-compose.traefik.yml up -d"
+        - "docker compose -f deploy/docker-compose.external.yml --env-file .env up -d"
+  down_external:
+    - title: all
+      pipeline:
+        - "docker compose -f deploy/docker-compose.external.yml down"
+  deploy:
+    - title: all
+      pipeline:
+        - "mkdir deploy/images"
+        - "docker tag {PROJECT_SLUG}:{ENV} {PROJECT_SLUG}:prod"
+        - "docker save {PROJECT_SLUG}:prod | gzip > deploy/images/{PROJECT_SLUG}.tar.gz"
+        - "rsync -chavzP --stats deploy/images/* {PROD_SSH}:/data/images/."
+        - "ssh -t {PROD_SSH} 'cd /data/images; docker load < {PROJECT_SLUG}.tar.gz'"
