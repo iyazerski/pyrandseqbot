@@ -109,8 +109,6 @@ class Configs(ConfigsABC):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
-        self.debug = self.context.env.get('DEBUG', cast=bool, default=False)
-
         self.path = PathConfigs(
             logs=Path(self.context.yml['path']['logs'])
         )
